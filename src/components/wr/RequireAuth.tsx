@@ -12,7 +12,11 @@ export function RequireAuth({ roles, children }: { roles?: AppRole[]; children: 
     // Dev preview: allow viewing pages without real auth (RoleSwitcher injects a fake profile)
     if (dev && !user) return;
     if (!user) navigate({ to: "/login" });
-    else if (roles && profile && !roles.includes(profile.role)) navigate({ to: "/unauthorized" });
+    else if (roles && profile && !roles.includes(profile.role)) {
+      // Real admins / super_admins can preview any role's pages (dev preview)
+      if (dev && (profile.role === "admin" || profile.role === "super_admin")) return;
+      navigate({ to: "/unauthorized" });
+    }
   }, [loading, user, profile, roles, navigate, dev]);
 
   // In dev preview, render the layout even without a real user/profile

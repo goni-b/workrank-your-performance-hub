@@ -63,7 +63,7 @@ export function Header() {
           {now.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
         </span>
         <span style={{ color: "#1E2D45", fontSize: 14 }}>|</span>
-        <span style={{ fontSize: 12, color: "#64748B" }}>
+        <span className="header-date" style={{ fontSize: 12, color: "#64748B" }}>
           {now.toLocaleDateString("he-IL", { weekday: "short", day: "numeric", month: "long" })}
         </span>
       </div>

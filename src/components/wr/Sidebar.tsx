@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { roleColor, roleLabel } from "@/lib/wr-utils";
 import {
@@ -40,6 +40,17 @@ const NAV: Record<string, NavItem[]> = {
 export function Sidebar() {
   const { profile, signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("wr_sidebar_collapsed");
+    if (saved !== null) setCollapsed(saved === "true");
+  }, []);
+  const toggleCollapsed = () => {
+    setCollapsed((c) => {
+      const next = !c;
+      try { localStorage.setItem("wr_sidebar_collapsed", String(next)); } catch {}
+      return next;
+    });
+  };
   const router = useRouterState();
   const pathname = router.location.pathname;
 
@@ -124,7 +135,7 @@ export function Sidebar() {
           {!collapsed && <span>התנתק</span>}
         </button>
         <button
-          onClick={() => setCollapsed((c) => !c)}
+          onClick={toggleCollapsed}
           style={{
             display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
             padding: "8px",
