@@ -11,9 +11,56 @@ function LoginPage() {
   const [email, setEmail] = useState(""); const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState(""); const [loading, setLoading] = useState(false);
 
+  // Quick test login: username 1234 / password 1234 -> mapped to a real admin user
+  const QUICK_USER = "1234";
+  const QUICK_PASS = "1234";
+  const QUICK_EMAIL = "admin1234@workrank.test";
+  const QUICK_REAL_PASS = "admin1234";
+  const DEFAULT_COMPANY_ID = "f2a6a02f-d0d2-4c9c-aebd-2b92b83e657b";
+
+  const quickAdminLogin = async () => {
+    setLoading(true);
+    try {
+      let { error } = await supabase.auth.signInWithPassword({
+        email: QUICK_EMAIL, password: QUICK_REAL_PASS,
+      });
+      if (error) {
+        // Create the admin test user on first run
+        const { error: signUpErr } = await supabase.auth.signUp({
+          email: QUICK_EMAIL, password: QUICK_REAL_PASS,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: { full_name: "אדמין בדיקה", role: "admin" },
+          },
+        });
+        if (signUpErr) throw signUpErr;
+        const { error: signInErr } = await supabase.auth.signInWithPassword({
+          email: QUICK_EMAIL, password: QUICK_REAL_PASS,
+        });
+        if (signInErr) throw signInErr;
+      }
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData.user) {
+        await supabase.from("profiles").update({
+          role: "admin", company_id: DEFAULT_COMPANY_ID, full_name: "אדמין בדיקה",
+        }).eq("id", userData.user.id);
+      }
+      toast.success("התחברת כאדמין");
+      navigate({ to: "/" });
+    } catch (err: any) {
+      toast.error(err?.message ?? "שגיאה");
+    } finally { setLoading(false); }
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault(); setLoading(true);
     try {
+      // Quick login shortcut: 1234 / 1234
+      if (mode === "login" && email.trim() === QUICK_USER && password === QUICK_PASS) {
+        setLoading(false);
+        await quickAdminLogin();
+        return;
+      }
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -57,16 +104,28 @@ function LoginPage() {
           )}
           <div>
             <label className="wr-label">אימייל</label>
-            <input className="wr-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input className="wr-input" type="text" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div>
             <label className="wr-label">סיסמה</label>
-            <input className="wr-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            <input className="wr-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <button type="submit" className="wr-btn-primary" style={{ width: "100%", marginTop: 6 }} disabled={loading}>
             {loading ? "..." : mode === "login" ? "כניסה" : "הרשמה"}
           </button>
         </form>
+        <button
+          type="button"
+          onClick={quickAdminLogin}
+          disabled={loading}
+          style={{
+            width: "100%", marginTop: 12, padding: "10px 14px", borderRadius: 10,
+            border: "1px dashed #3B82F6", background: "rgba(59,130,246,0.08)",
+            color: "#3B82F6", fontWeight: 700, cursor: "pointer", fontFamily: "Heebo",
+          }}
+        >
+          ⚡ כניסה מהירה כאדמין (1234 / 1234)
+        </button>
         <div style={{ textAlign: "center", marginTop: 18, fontSize: 12, color: "#64748B" }}>
           {mode === "login" ? "אין לך חשבון? " : "כבר רשום? "}
           <button onClick={() => setMode(mode === "login" ? "signup" : "login")} style={{ background: "none", border: "none", color: "#3B82F6", cursor: "pointer", fontWeight: 700, fontFamily: "Heebo" }}>
