@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,8 +26,8 @@ export function useAttendance() {
   const [isSaving, setIsSaving] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [activeBreak, setActiveBreak] = useState<ActiveBreak | null>(null);
-
-  const todayDate = todayISO();
+  const [todayDate, setTodayDate] = useState<string>(() => todayISO());
+  const currentDateRef = useRef(todayDate);
 
   const loadTodayRecord = useCallback(async () => {
     if (!user) { setIsLoading(false); return; }
@@ -58,6 +58,22 @@ export function useAttendance() {
   }, [user, todayDate]);
 
   useEffect(() => { void loadActiveBreak(); }, [loadActiveBreak]);
+
+  // Detect midnight rollover — reset state and reload
+  useEffect(() => {
+    const t = setInterval(() => {
+      const newDate = todayISO();
+      if (newDate !== currentDateRef.current) {
+        currentDateRef.current = newDate;
+        setTodayDate(newDate);
+        setTodayRecord(null);
+        setActiveBreak(null);
+        setElapsedSeconds(0);
+        toast("🌅 יום עבודה חדש החל!");
+      }
+    }, 30_000);
+    return () => clearInterval(t);
+  }, []);
 
   // Live timer
   useEffect(() => {
@@ -171,8 +187,10 @@ export function useAttendance() {
     return `${h}:${mm}:${ss}`;
   };
 
-  const isCheckedIn = !!todayRecord?.check_in;
-  const isCheckedOut = !!todayRecord?.check_out;
+  // Only treat as checked-in/out if the record actually belongs to today
+  const isToday = todayRecord?.date === todayDate;
+  const isCheckedIn = isToday && !!todayRecord?.check_in;
+  const isCheckedOut = isToday && !!todayRecord?.check_out;
   const isClockedIn = isCheckedIn && !isCheckedOut;
 
   const checkInTime = todayRecord?.check_in
