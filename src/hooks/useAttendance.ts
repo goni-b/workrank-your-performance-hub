@@ -16,6 +16,8 @@ export interface AttendanceRecord {
 
 const todayISO = () => new Date().toLocaleDateString("en-CA");
 
+interface ActiveBreak { id: string; started_at: string }
+
 export function useAttendance() {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -23,6 +25,7 @@ export function useAttendance() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [activeBreak, setActiveBreak] = useState<ActiveBreak | null>(null);
 
   const todayDate = todayISO();
 
@@ -41,6 +44,20 @@ export function useAttendance() {
   }, [user, todayDate]);
 
   useEffect(() => { void loadTodayRecord(); }, [loadTodayRecord]);
+
+  const loadActiveBreak = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("break_sessions")
+      .select("id, started_at")
+      .eq("user_id", user.id)
+      .eq("date", todayDate)
+      .is("ended_at", null)
+      .maybeSingle();
+    setActiveBreak((data as ActiveBreak | null) ?? null);
+  }, [user, todayDate]);
+
+  useEffect(() => { void loadActiveBreak(); }, [loadActiveBreak]);
 
   // Live timer
   useEffect(() => {
@@ -116,6 +133,37 @@ export function useAttendance() {
     setIsSaving(false);
   }, [user, todayRecord, elapsedSeconds]);
 
+  const startBreak = useCallback(async () => {
+    if (!user) return;
+    if (!todayRecord?.check_in || todayRecord.check_out) {
+      toast.error("יש להיכנס לעבודה תחילה");
+      return;
+    }
+    if (activeBreak) { toast.error("כבר בהפסקה"); return; }
+    const { data, error } = await supabase
+      .from("break_sessions")
+      .insert({ user_id: user.id, date: todayDate, started_at: new Date().toISOString() })
+      .select("id, started_at")
+      .single();
+    if (error) { toast.error("שגיאה בתחילת הפסקה"); console.error(error); return; }
+    setActiveBreak(data as ActiveBreak);
+    toast("☕ הפסקה החלה – השעון ממשיך לרוץ");
+  }, [user, todayRecord, activeBreak, todayDate]);
+
+  const endBreak = useCallback(async () => {
+    if (!user || !activeBreak) return;
+    const endedAt = new Date();
+    const startedAt = new Date(activeBreak.started_at);
+    const durationMinutes = Math.max(1, Math.round((endedAt.getTime() - startedAt.getTime()) / 60000));
+    const { error } = await supabase
+      .from("break_sessions")
+      .update({ ended_at: endedAt.toISOString(), duration_minutes: durationMinutes })
+      .eq("id", activeBreak.id);
+    if (error) { toast.error("שגיאה בסיום ההפסקה"); console.error(error); return; }
+    setActiveBreak(null);
+    toast.success(`חזרת לעבודה ✅ | הפסקה: ${durationMinutes} דקות`);
+  }, [user, activeBreak]);
+
   const formatTimer = (s: number) => {
     const h = Math.floor(s / 3600).toString().padStart(2, "0");
     const mm = Math.floor((s % 3600) / 60).toString().padStart(2, "0");
@@ -143,5 +191,8 @@ export function useAttendance() {
     timerDisplay: formatTimer(elapsedSeconds),
     checkIn,
     checkOut,
+    isOnBreak: !!activeBreak,
+    startBreak,
+    endBreak,
   };
 }
