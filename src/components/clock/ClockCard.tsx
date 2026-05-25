@@ -6,14 +6,18 @@ interface Props {
   isSaving: boolean;
   onCheckIn: () => void;
   onCheckOut: () => void;
+  isOnBreak: boolean;
+  onStartBreak: () => void;
+  onEndBreak: () => void;
 }
 
 export function ClockCard({
   isClockedIn, isCheckedOut, timerDisplay,
   checkInTime, isSaving, onCheckIn, onCheckOut,
+  isOnBreak, onStartBreak, onEndBreak,
 }: Props) {
-  const statusLabel = isClockedIn ? "בעבודה" : isCheckedOut ? "סיים היום" : "לא נכנס";
-  const statusColor = isClockedIn ? "#10B981" : isCheckedOut ? "#94A3B8" : "#F59E0B";
+  const statusLabel = isOnBreak ? "בהפסקה" : isClockedIn ? "בעבודה" : isCheckedOut ? "סיים היום" : "לא נכנס";
+  const statusColor = isOnBreak ? "#F59E0B" : isClockedIn ? "#10B981" : isCheckedOut ? "#94A3B8" : "#F59E0B";
 
   return (
     <div
@@ -86,9 +90,53 @@ export function ClockCard({
           <p style={{ color: "var(--wr-text-muted)", fontSize: 12, marginBottom: 22 }}>
             שעות עבודה היום
           </p>
-          <button className="wr-btn-checkout" onClick={onCheckOut} disabled={isSaving}>
-            {isSaving ? "⏳ שומר..." : "🔴 יציאה מהעבודה"}
-          </button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+            {!isOnBreak ? (
+              <button
+                onClick={onStartBreak}
+                style={{
+                  padding: "10px 28px", borderRadius: 10,
+                  background: "rgba(245,158,11,0.12)",
+                  border: "1px solid rgba(245,158,11,0.4)",
+                  color: "#F59E0B",
+                  fontFamily: "Heebo, sans-serif", fontSize: 13, fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                ☕ הפסקה
+              </button>
+            ) : (
+              <div style={{
+                width: "100%", maxWidth: 360,
+                background: "rgba(245,158,11,0.08)",
+                border: "1px solid rgba(245,158,11,0.35)",
+                borderRadius: 12, padding: "14px 20px",
+                display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, textAlign: "right" }}>
+                  <span style={{ fontSize: 18 }}>☕</span>
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: "#F59E0B", margin: 0 }}>בהפסקה כרגע</p>
+                    <p style={{ fontSize: 11, color: "#64748B", margin: 0 }}>השעון ממשיך לרוץ</p>
+                  </div>
+                </div>
+                <button
+                  onClick={onEndBreak}
+                  style={{
+                    padding: "8px 16px", borderRadius: 8,
+                    background: "#10B981", border: "none", color: "#fff",
+                    fontFamily: "Heebo, sans-serif", fontSize: 12, fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  חזרתי ✅
+                </button>
+              </div>
+            )}
+            <button className="wr-btn-checkout" onClick={onCheckOut} disabled={isSaving}>
+              {isSaving ? "⏳ שומר..." : "🔴 יציאה מהעבודה"}
+            </button>
+          </div>
         </>
       )}
 

@@ -5,7 +5,7 @@ import { PagePlaceholder } from "@/components/wr/PagePlaceholder";
 export const Route = createFileRoute("/employee/tasks")({
   component: () => (
     <RequireAuth roles={["employee"]}>
-      <PagePlaceholder title="המשימות שלי" subtitle="יגיע ב-M5" />
+      <PagePlaceholder title="המשימות שלי" subtitle="יהיה זמין בקרוב" />
     </RequireAuth>
   ),
 });

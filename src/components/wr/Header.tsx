@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bell, Star } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { formatHebrewDate, formatTime } from "@/lib/wr-utils";
 import { WrAvatar } from "./Avatar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -55,11 +54,18 @@ export function Header() {
         zIndex: 5,
       }}
     >
-      {/* Left side - time */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#64748B" }}>
-        <span style={{ fontWeight: 600, color: "#94A3B8" }}>{formatTime(now)}</span>
-        <span style={{ opacity: 0.4 }}>|</span>
-        <span>{formatHebrewDate(now)}</span>
+      {/* Left side - time + date */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+        <span style={{
+          fontSize: 13, fontWeight: 700, color: "#F1F5F9",
+          fontVariantNumeric: "tabular-nums", direction: "ltr", letterSpacing: 1,
+        }}>
+          {now.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
+        </span>
+        <span style={{ color: "#1E2D45", fontSize: 14 }}>|</span>
+        <span style={{ fontSize: 12, color: "#64748B" }}>
+          {now.toLocaleDateString("he-IL", { weekday: "short", day: "numeric", month: "long" })}
+        </span>
       </div>
 
       {/* Right side */}

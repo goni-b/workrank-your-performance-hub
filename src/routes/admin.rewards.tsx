@@ -5,7 +5,7 @@ import { PagePlaceholder } from "@/components/wr/PagePlaceholder";
 export const Route = createFileRoute("/admin/rewards")({
   component: () => (
     <RequireAuth roles={["admin","super_admin"]}>
-      <PagePlaceholder title="פרסים" subtitle="ניהול פרסים — יגיע ב-M6" />
+      <PagePlaceholder title="פרסים" subtitle="ניהול פרסים — יהיה זמין בקרוב" />
     </RequireAuth>
   ),
 });
