@@ -61,15 +61,18 @@ export function RoleSwitcher() {
         borderBottom: "1px solid #1E2D45",
         display: "flex",
         alignItems: "center",
-        gap: 10,
-        padding: "0 16px",
+        gap: 8,
+        padding: "0 12px",
         direction: "rtl",
         fontFamily: "Heebo, sans-serif",
-        fontSize: 12,
+        fontSize: 11,
         color: "#F1F5F9",
+        overflow: "hidden",
+        flexWrap: "nowrap",
+        whiteSpace: "nowrap",
       }}
     >
-      <span style={{ color: "#94A3B8", fontWeight: 600 }}>
+      <span style={{ color: "#94A3B8", fontWeight: 600, flexShrink: 0, whiteSpace: "nowrap" }}>
         {isAdmin ? "👁️ תצוגה כ:" : "👁️ תצוגה מקדימה:"}
       </span>
       {ROLES.map((r) => {
@@ -79,41 +82,39 @@ export function RoleSwitcher() {
             key={r.id}
             to={r.path}
             style={{
-              padding: "5px 12px",
-              borderRadius: 8,
-              fontWeight: 700,
-              fontSize: 12,
+              padding: "3px 10px",
+              borderRadius: 99,
+              fontWeight: isActive ? 700 : 500,
+              fontSize: 11,
               textDecoration: "none",
-              background: isActive ? r.color : "transparent",
+              background: isActive ? r.color + "20" : "transparent",
               border: `1px solid ${isActive ? r.color : "#1E2D45"}`,
-              color: isActive ? "#0D1321" : r.color,
+              color: isActive ? r.color : "#64748B",
               transition: "all 0.15s",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
             {r.label}
           </Link>
         );
       })}
-      <span style={{ opacity: 0.3 }}>|</span>
-      <span style={{ color: "#64748B" }}>
-        מצב: <span style={{ color: "#F1F5F9", fontWeight: 700 }}>
-          {ROLES.find((r) => r.id === activeRole)?.label ?? "—"}
-        </span>
-      </span>
-      <div style={{ flex: 1 }} />
       {!isAdmin && <span
         style={{
-          padding: "3px 8px",
-          borderRadius: 6,
+          marginRight: "auto",
+          padding: "2px 6px",
+          borderRadius: 4,
           background: "rgba(239,68,68,0.15)",
           border: "1px solid rgba(239,68,68,0.4)",
           color: "#EF4444",
           fontWeight: 800,
-          fontSize: 10,
+          fontSize: 9,
           letterSpacing: 0.5,
+          flexShrink: 0,
+          whiteSpace: "nowrap",
         }}
       >
-        DEV ONLY
+        DEV
       </span>}
     </div>
   );
