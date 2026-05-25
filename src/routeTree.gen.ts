@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ManagerClockRouteImport } from './routes/manager.clock'
 import { Route as EmployeeClockRouteImport } from './routes/employee.clock'
+import { Route as AdminEmployeesRouteImport } from './routes/admin.employees'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
@@ -47,6 +48,11 @@ const EmployeeClockRoute = EmployeeClockRouteImport.update({
   path: '/employee/clock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEmployeesRoute = AdminEmployeesRouteImport.update({
+  id: '/admin/employees',
+  path: '/admin/employees',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/employee/clock': typeof EmployeeClockRoute
   '/manager/clock': typeof ManagerClockRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/employee/clock': typeof EmployeeClockRoute
   '/manager/clock': typeof ManagerClockRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/employee/clock': typeof EmployeeClockRoute
   '/manager/clock': typeof ManagerClockRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/select-company'
     | '/unauthorized'
     | '/admin/dashboard'
+    | '/admin/employees'
     | '/employee/clock'
     | '/manager/clock'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/select-company'
     | '/unauthorized'
     | '/admin/dashboard'
+    | '/admin/employees'
     | '/employee/clock'
     | '/manager/clock'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/select-company'
     | '/unauthorized'
     | '/admin/dashboard'
+    | '/admin/employees'
     | '/employee/clock'
     | '/manager/clock'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   SelectCompanyRoute: typeof SelectCompanyRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminEmployeesRoute: typeof AdminEmployeesRoute
   EmployeeClockRoute: typeof EmployeeClockRoute
   ManagerClockRoute: typeof ManagerClockRoute
 }
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmployeeClockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/employees': {
+      id: '/admin/employees'
+      path: '/admin/employees'
+      fullPath: '/admin/employees'
+      preLoaderRoute: typeof AdminEmployeesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   SelectCompanyRoute: SelectCompanyRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminEmployeesRoute: AdminEmployeesRoute,
   EmployeeClockRoute: EmployeeClockRoute,
   ManagerClockRoute: ManagerClockRoute,
 }
