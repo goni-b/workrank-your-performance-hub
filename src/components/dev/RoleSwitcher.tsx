@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth, isDevPreview, type AppRole, type Profile } from "@/lib/auth-context";
 
 type PreviewRole = Exclude<AppRole, "super_admin">;
@@ -24,6 +24,8 @@ const makeDevProfile = (role: PreviewRole): Profile => ({
 export function RoleSwitcher() {
   const { user, profile, setDevProfileOverride } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const dev = isDevPreview();
   // Real admins can also preview manager/employee views
@@ -48,7 +50,7 @@ export function RoleSwitcher() {
     }
   }, [show, isAdmin, user, activeRole, setDevProfileOverride]);
 
-  if (!show) return null;
+  if (!mounted || !show) return null;
 
   return (
     <div

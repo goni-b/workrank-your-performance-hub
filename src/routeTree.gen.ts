@@ -27,6 +27,7 @@ import { Route as AdminRewardsRouteImport } from './routes/admin.rewards'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminEmployeesRouteImport } from './routes/admin.employees'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminEmployeesIdRouteImport } from './routes/admin.employees.$id'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -118,6 +119,11 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEmployeesIdRoute = AdminEmployeesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminEmployeesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -125,7 +131,7 @@ export interface FileRoutesByFullPath {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/employees': typeof AdminEmployeesRouteWithChildren
   '/admin/reports': typeof AdminReportsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/manager/rewards': typeof ManagerRewardsRoute
   '/manager/tasks': typeof ManagerTasksRoute
   '/manager/team': typeof ManagerTeamRoute
+  '/admin/employees/$id': typeof AdminEmployeesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,7 +152,7 @@ export interface FileRoutesByTo {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/employees': typeof AdminEmployeesRouteWithChildren
   '/admin/reports': typeof AdminReportsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/manager/rewards': typeof ManagerRewardsRoute
   '/manager/tasks': typeof ManagerTasksRoute
   '/manager/team': typeof ManagerTeamRoute
+  '/admin/employees/$id': typeof AdminEmployeesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -166,7 +174,7 @@ export interface FileRoutesById {
   '/select-company': typeof SelectCompanyRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/employees': typeof AdminEmployeesRouteWithChildren
   '/admin/reports': typeof AdminReportsRoute
   '/admin/rewards': typeof AdminRewardsRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/manager/rewards': typeof ManagerRewardsRoute
   '/manager/tasks': typeof ManagerTasksRoute
   '/manager/team': typeof ManagerTeamRoute
+  '/admin/employees/$id': typeof AdminEmployeesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/manager/rewards'
     | '/manager/tasks'
     | '/manager/team'
+    | '/admin/employees/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/manager/rewards'
     | '/manager/tasks'
     | '/manager/team'
+    | '/admin/employees/$id'
   id:
     | '__root__'
     | '/'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/manager/rewards'
     | '/manager/tasks'
     | '/manager/team'
+    | '/admin/employees/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,7 +261,7 @@ export interface RootRouteChildren {
   SelectCompanyRoute: typeof SelectCompanyRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
-  AdminEmployeesRoute: typeof AdminEmployeesRoute
+  AdminEmployeesRoute: typeof AdminEmployeesRouteWithChildren
   AdminReportsRoute: typeof AdminReportsRoute
   AdminRewardsRoute: typeof AdminRewardsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -392,8 +404,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/employees/$id': {
+      id: '/admin/employees/$id'
+      path: '/$id'
+      fullPath: '/admin/employees/$id'
+      preLoaderRoute: typeof AdminEmployeesIdRouteImport
+      parentRoute: typeof AdminEmployeesRoute
+    }
   }
 }
+
+interface AdminEmployeesRouteChildren {
+  AdminEmployeesIdRoute: typeof AdminEmployeesIdRoute
+}
+
+const AdminEmployeesRouteChildren: AdminEmployeesRouteChildren = {
+  AdminEmployeesIdRoute: AdminEmployeesIdRoute,
+}
+
+const AdminEmployeesRouteWithChildren = AdminEmployeesRoute._addFileChildren(
+  AdminEmployeesRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -401,7 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   SelectCompanyRoute: SelectCompanyRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   AdminDashboardRoute: AdminDashboardRoute,
-  AdminEmployeesRoute: AdminEmployeesRoute,
+  AdminEmployeesRoute: AdminEmployeesRouteWithChildren,
   AdminReportsRoute: AdminReportsRoute,
   AdminRewardsRoute: AdminRewardsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
