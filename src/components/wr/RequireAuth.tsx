@@ -9,7 +9,7 @@ export function RequireAuth({ roles, children }: { roles?: AppRole[]; children: 
   useEffect(() => {
     if (loading) return;
     if (!user) navigate({ to: "/login" });
-    else if (roles && profile && !roles.includes(profile.role)) navigate({ to: "/" });
+    else if (roles && profile && !roles.includes(profile.role)) navigate({ to: "/unauthorized" });
   }, [loading, user, profile, roles, navigate]);
   if (loading || !user || !profile) {
     return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8" }}>טוען…</div>;
