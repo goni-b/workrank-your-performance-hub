@@ -90,7 +90,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <Ctx.Provider
       value={{
         user, session,
-        profile: profile ?? (isDevPreview() && !user ? devProfileOverride : null),
+        profile: (() => {
+          if (devProfileOverride) {
+            // Dev preview without user, or real admin previewing other roles
+            if (!user) return devProfileOverride;
+            if (profile && (profile.role === "admin" || profile.role === "super_admin")) {
+              return { ...profile, role: devProfileOverride.role };
+            }
+          }
+          return profile;
+        })(),
         loading,
         selectedCompanyId, setSelectedCompanyId,
         signOut: async () => { await supabase.auth.signOut(); setSelectedCompanyId(null); },

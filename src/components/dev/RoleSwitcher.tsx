@@ -22,20 +22,33 @@ const makeDevProfile = (role: PreviewRole): Profile => ({
 });
 
 export function RoleSwitcher() {
-  const { user, setDevProfileOverride } = useAuth();
+  const { user, profile, setDevProfileOverride } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const dev = isDevPreview();
+  // Real admins can also preview manager/employee views
+  const isAdmin = !!user && (profile?.role === "admin" || profile?.role === "super_admin");
+  const show = dev || isAdmin;
   const activeRole =
     ROLES.find((r) => pathname.startsWith(r.prefix))?.id ?? null;
 
   // Sync dev profile override based on path
   useEffect(() => {
-    if (!dev || user) return;
-    setDevProfileOverride(activeRole ? makeDevProfile(activeRole) : null);
-  }, [dev, user, activeRole, setDevProfileOverride]);
+    if (!show) return;
+    if (isAdmin) {
+      // For real admin: override only when previewing manager/employee paths
+      if (activeRole && activeRole !== "admin") {
+        setDevProfileOverride(makeDevProfile(activeRole));
+      } else {
+        setDevProfileOverride(null);
+      }
+    } else if (!user) {
+      // Dev preview without auth
+      setDevProfileOverride(activeRole ? makeDevProfile(activeRole) : null);
+    }
+  }, [show, isAdmin, user, activeRole, setDevProfileOverride]);
 
-  if (!dev) return null;
+  if (!show) return null;
 
   return (
     <div
@@ -56,7 +69,9 @@ export function RoleSwitcher() {
         color: "#F1F5F9",
       }}
     >
-      <span style={{ color: "#94A3B8", fontWeight: 600 }}>👁️ תצוגה מקדימה:</span>
+      <span style={{ color: "#94A3B8", fontWeight: 600 }}>
+        {isAdmin ? "👁️ תצוגה כ:" : "👁️ תצוגה מקדימה:"}
+      </span>
       {ROLES.map((r) => {
         const isActive = activeRole === r.id;
         return (
@@ -86,7 +101,7 @@ export function RoleSwitcher() {
         </span>
       </span>
       <div style={{ flex: 1 }} />
-      <span
+      {!isAdmin && <span
         style={{
           padding: "3px 8px",
           borderRadius: 6,
@@ -99,7 +114,7 @@ export function RoleSwitcher() {
         }}
       >
         DEV ONLY
-      </span>
+      </span>}
     </div>
   );
 }
