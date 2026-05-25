@@ -55,3 +55,17 @@ export function todayISO() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
+
+export function getHebrewError(error: unknown): string {
+  const msg = typeof error === "string" ? error : (error as any)?.message ?? "";
+  if (!msg) return "אירעה שגיאה, נסה שנית";
+  const m = String(msg);
+  if (m.includes("Invalid login credentials")) return "אימייל או סיסמה שגויים";
+  if (m.includes("Email not confirmed"))        return "האימייל לא אומת, בדוק את תיבת הדואר";
+  if (m.toLowerCase().includes("too many"))     return "יותר מדי ניסיונות, המתן מספר דקות";
+  if (m.toLowerCase().includes("network"))      return "בעיית חיבור לאינטרנט";
+  if (m.includes("duplicate key") || m.toLowerCase().includes("already registered"))
+    return "המשתמש כבר קיים במערכת";
+  if (m.toLowerCase().includes("password"))     return "הסיסמה אינה תקינה";
+  return "אירעה שגיאה, נסה שנית";
+}
