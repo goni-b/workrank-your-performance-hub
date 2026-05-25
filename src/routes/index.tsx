@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth, isDevPreview } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -12,7 +12,10 @@ function Index() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) { navigate({ to: "/login" }); return; }
+    if (!user) {
+      if (isDevPreview()) { navigate({ to: "/admin/dashboard" }); return; }
+      navigate({ to: "/login" }); return;
+    }
     if (!profile) return;
     switch (profile.role) {
       case "super_admin": navigate({ to: "/select-company" }); break;
