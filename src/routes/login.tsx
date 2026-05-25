@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { getHebrewError } from "@/lib/wr-utils";
 
 export const Route = createFileRoute("/login")({ component: LoginPage });
 
@@ -48,7 +49,7 @@ function LoginPage() {
       toast.success("התחברת כאדמין");
       navigate({ to: "/" });
     } catch (err: any) {
-      toast.error(err?.message ?? "שגיאה");
+      toast.error(getHebrewError(err));
     } finally { setLoading(false); }
   };
 
@@ -76,7 +77,7 @@ function LoginPage() {
         navigate({ to: "/" });
       }
     } catch (err: any) {
-      toast.error(err?.message ?? "שגיאה");
+      toast.error(getHebrewError(err));
     } finally { setLoading(false); }
   };
 
