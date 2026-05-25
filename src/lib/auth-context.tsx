@@ -24,14 +24,27 @@ interface AuthCtx {
   setSelectedCompanyId: (id: string | null) => void;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  devMode: boolean;
+  setDevProfileOverride: (p: Profile | null) => void;
 }
 
 const Ctx = createContext<AuthCtx | null>(null);
+
+export const isDevPreview = (): boolean => {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  if (host === "localhost" || host === "127.0.0.1") return true;
+  if (host.includes("lovable.app")) return true;
+  if ((import.meta as any).env?.DEV) return true;
+  if ((import.meta as any).env?.VITE_SHOW_ROLE_SWITCHER === "true") return true;
+  return false;
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [devProfileOverride, setDevProfileOverride] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCompanyId, setSelectedCompanyIdState] = useState<string | null>(() => {
     if (typeof window === "undefined") return null;
@@ -76,10 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider
       value={{
-        user, session, profile, loading,
+        user, session,
+        profile: profile ?? (isDevPreview() && !user ? devProfileOverride : null),
+        loading,
         selectedCompanyId, setSelectedCompanyId,
         signOut: async () => { await supabase.auth.signOut(); setSelectedCompanyId(null); },
         refreshProfile: async () => { if (user) await loadProfile(user.id); },
+        devMode: isDevPreview(),
+        setDevProfileOverride,
       }}
     >
       {children}
