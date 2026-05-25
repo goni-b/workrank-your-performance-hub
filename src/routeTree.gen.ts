@@ -9,11 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as SelectCompanyRouteImport } from './routes/select-company'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ManagerTeamRouteImport } from './routes/manager.team'
+import { Route as ManagerTasksRouteImport } from './routes/manager.tasks'
+import { Route as ManagerRewardsRouteImport } from './routes/manager.rewards'
+import { Route as ManagerClockRouteImport } from './routes/manager.clock'
+import { Route as EmployeeTasksRouteImport } from './routes/employee.tasks'
+import { Route as EmployeeRewardsRouteImport } from './routes/employee.rewards'
+import { Route as EmployeePerformanceRouteImport } from './routes/employee.performance'
+import { Route as EmployeeClockRouteImport } from './routes/employee.clock'
+import { Route as AdminTeamsRouteImport } from './routes/admin.teams'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminRewardsRouteImport } from './routes/admin.rewards'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminEmployeesRouteImport } from './routes/admin.employees'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SelectCompanyRoute = SelectCompanyRouteImport.update({
   id: '/select-company',
   path: '/select-company',
@@ -29,6 +48,71 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManagerTeamRoute = ManagerTeamRouteImport.update({
+  id: '/manager/team',
+  path: '/manager/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerTasksRoute = ManagerTasksRouteImport.update({
+  id: '/manager/tasks',
+  path: '/manager/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerRewardsRoute = ManagerRewardsRouteImport.update({
+  id: '/manager/rewards',
+  path: '/manager/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManagerClockRoute = ManagerClockRouteImport.update({
+  id: '/manager/clock',
+  path: '/manager/clock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeTasksRoute = EmployeeTasksRouteImport.update({
+  id: '/employee/tasks',
+  path: '/employee/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeRewardsRoute = EmployeeRewardsRouteImport.update({
+  id: '/employee/rewards',
+  path: '/employee/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeePerformanceRoute = EmployeePerformanceRouteImport.update({
+  id: '/employee/performance',
+  path: '/employee/performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeClockRoute = EmployeeClockRouteImport.update({
+  id: '/employee/clock',
+  path: '/employee/clock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTeamsRoute = AdminTeamsRouteImport.update({
+  id: '/admin/teams',
+  path: '/admin/teams',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRewardsRoute = AdminRewardsRouteImport.update({
+  id: '/admin/rewards',
+  path: '/admin/rewards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/admin/reports',
+  path: '/admin/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEmployeesRoute = AdminEmployeesRouteImport.update({
+  id: '/admin/employees',
+  path: '/admin/employees',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -39,38 +123,156 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/select-company': typeof SelectCompanyRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/employee/clock': typeof EmployeeClockRoute
+  '/employee/performance': typeof EmployeePerformanceRoute
+  '/employee/rewards': typeof EmployeeRewardsRoute
+  '/employee/tasks': typeof EmployeeTasksRoute
+  '/manager/clock': typeof ManagerClockRoute
+  '/manager/rewards': typeof ManagerRewardsRoute
+  '/manager/tasks': typeof ManagerTasksRoute
+  '/manager/team': typeof ManagerTeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/select-company': typeof SelectCompanyRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/employee/clock': typeof EmployeeClockRoute
+  '/employee/performance': typeof EmployeePerformanceRoute
+  '/employee/rewards': typeof EmployeeRewardsRoute
+  '/employee/tasks': typeof EmployeeTasksRoute
+  '/manager/clock': typeof ManagerClockRoute
+  '/manager/rewards': typeof ManagerRewardsRoute
+  '/manager/tasks': typeof ManagerTasksRoute
+  '/manager/team': typeof ManagerTeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/select-company': typeof SelectCompanyRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/employees': typeof AdminEmployeesRoute
+  '/admin/reports': typeof AdminReportsRoute
+  '/admin/rewards': typeof AdminRewardsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/teams': typeof AdminTeamsRoute
+  '/employee/clock': typeof EmployeeClockRoute
+  '/employee/performance': typeof EmployeePerformanceRoute
+  '/employee/rewards': typeof EmployeeRewardsRoute
+  '/employee/tasks': typeof EmployeeTasksRoute
+  '/manager/clock': typeof ManagerClockRoute
+  '/manager/rewards': typeof ManagerRewardsRoute
+  '/manager/tasks': typeof ManagerTasksRoute
+  '/manager/team': typeof ManagerTeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/select-company' | '/admin/dashboard'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/select-company'
+    | '/unauthorized'
+    | '/admin/dashboard'
+    | '/admin/employees'
+    | '/admin/reports'
+    | '/admin/rewards'
+    | '/admin/settings'
+    | '/admin/teams'
+    | '/employee/clock'
+    | '/employee/performance'
+    | '/employee/rewards'
+    | '/employee/tasks'
+    | '/manager/clock'
+    | '/manager/rewards'
+    | '/manager/tasks'
+    | '/manager/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/select-company' | '/admin/dashboard'
-  id: '__root__' | '/' | '/login' | '/select-company' | '/admin/dashboard'
+  to:
+    | '/'
+    | '/login'
+    | '/select-company'
+    | '/unauthorized'
+    | '/admin/dashboard'
+    | '/admin/employees'
+    | '/admin/reports'
+    | '/admin/rewards'
+    | '/admin/settings'
+    | '/admin/teams'
+    | '/employee/clock'
+    | '/employee/performance'
+    | '/employee/rewards'
+    | '/employee/tasks'
+    | '/manager/clock'
+    | '/manager/rewards'
+    | '/manager/tasks'
+    | '/manager/team'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/select-company'
+    | '/unauthorized'
+    | '/admin/dashboard'
+    | '/admin/employees'
+    | '/admin/reports'
+    | '/admin/rewards'
+    | '/admin/settings'
+    | '/admin/teams'
+    | '/employee/clock'
+    | '/employee/performance'
+    | '/employee/rewards'
+    | '/employee/tasks'
+    | '/manager/clock'
+    | '/manager/rewards'
+    | '/manager/tasks'
+    | '/manager/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   SelectCompanyRoute: typeof SelectCompanyRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminEmployeesRoute: typeof AdminEmployeesRoute
+  AdminReportsRoute: typeof AdminReportsRoute
+  AdminRewardsRoute: typeof AdminRewardsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTeamsRoute: typeof AdminTeamsRoute
+  EmployeeClockRoute: typeof EmployeeClockRoute
+  EmployeePerformanceRoute: typeof EmployeePerformanceRoute
+  EmployeeRewardsRoute: typeof EmployeeRewardsRoute
+  EmployeeTasksRoute: typeof EmployeeTasksRoute
+  ManagerClockRoute: typeof ManagerClockRoute
+  ManagerRewardsRoute: typeof ManagerRewardsRoute
+  ManagerTasksRoute: typeof ManagerTasksRoute
+  ManagerTeamRoute: typeof ManagerTeamRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/select-company': {
       id: '/select-company'
       path: '/select-company'
@@ -92,6 +294,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manager/team': {
+      id: '/manager/team'
+      path: '/manager/team'
+      fullPath: '/manager/team'
+      preLoaderRoute: typeof ManagerTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/tasks': {
+      id: '/manager/tasks'
+      path: '/manager/tasks'
+      fullPath: '/manager/tasks'
+      preLoaderRoute: typeof ManagerTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/rewards': {
+      id: '/manager/rewards'
+      path: '/manager/rewards'
+      fullPath: '/manager/rewards'
+      preLoaderRoute: typeof ManagerRewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manager/clock': {
+      id: '/manager/clock'
+      path: '/manager/clock'
+      fullPath: '/manager/clock'
+      preLoaderRoute: typeof ManagerClockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/tasks': {
+      id: '/employee/tasks'
+      path: '/employee/tasks'
+      fullPath: '/employee/tasks'
+      preLoaderRoute: typeof EmployeeTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/rewards': {
+      id: '/employee/rewards'
+      path: '/employee/rewards'
+      fullPath: '/employee/rewards'
+      preLoaderRoute: typeof EmployeeRewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/performance': {
+      id: '/employee/performance'
+      path: '/employee/performance'
+      fullPath: '/employee/performance'
+      preLoaderRoute: typeof EmployeePerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/clock': {
+      id: '/employee/clock'
+      path: '/employee/clock'
+      fullPath: '/employee/clock'
+      preLoaderRoute: typeof EmployeeClockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/teams': {
+      id: '/admin/teams'
+      path: '/admin/teams'
+      fullPath: '/admin/teams'
+      preLoaderRoute: typeof AdminTeamsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/rewards': {
+      id: '/admin/rewards'
+      path: '/admin/rewards'
+      fullPath: '/admin/rewards'
+      preLoaderRoute: typeof AdminRewardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/employees': {
+      id: '/admin/employees'
+      path: '/admin/employees'
+      fullPath: '/admin/employees'
+      preLoaderRoute: typeof AdminEmployeesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -106,8 +399,32 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   SelectCompanyRoute: SelectCompanyRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminEmployeesRoute: AdminEmployeesRoute,
+  AdminReportsRoute: AdminReportsRoute,
+  AdminRewardsRoute: AdminRewardsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminTeamsRoute: AdminTeamsRoute,
+  EmployeeClockRoute: EmployeeClockRoute,
+  EmployeePerformanceRoute: EmployeePerformanceRoute,
+  EmployeeRewardsRoute: EmployeeRewardsRoute,
+  EmployeeTasksRoute: EmployeeTasksRoute,
+  ManagerClockRoute: ManagerClockRoute,
+  ManagerRewardsRoute: ManagerRewardsRoute,
+  ManagerTasksRoute: ManagerTasksRoute,
+  ManagerTeamRoute: ManagerTeamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
