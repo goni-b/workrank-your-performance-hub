@@ -10,6 +10,7 @@ export default function ClockPage() {
     timerDisplay, checkInTime,
     isSaving, isLoading,
     checkIn, checkOut,
+    isOnBreak, startBreak, endBreak,
   } = useAttendance();
 
   if (isLoading) return <ClockSkeleton />;
@@ -33,6 +34,9 @@ export default function ClockPage() {
         isSaving={isSaving}
         onCheckIn={checkIn}
         onCheckOut={checkOut}
+        isOnBreak={isOnBreak}
+        onStartBreak={startBreak}
+        onEndBreak={endBreak}
       />
 
       <div style={{ marginTop: 16 }}>
