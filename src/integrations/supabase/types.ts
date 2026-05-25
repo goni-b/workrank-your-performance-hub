@@ -164,7 +164,10 @@ export type Database = {
           full_name: string
           id: string
           job_title: string | null
+          notes: string | null
+          phone: string | null
           role: Database["public"]["Enums"]["app_role"]
+          start_date: string | null
           status: Database["public"]["Enums"]["profile_status"]
           team_id: string | null
         }
@@ -175,7 +178,10 @@ export type Database = {
           full_name: string
           id: string
           job_title?: string | null
+          notes?: string | null
+          phone?: string | null
           role?: Database["public"]["Enums"]["app_role"]
+          start_date?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
           team_id?: string | null
         }
@@ -186,7 +192,10 @@ export type Database = {
           full_name?: string
           id?: string
           job_title?: string | null
+          notes?: string | null
+          phone?: string | null
           role?: Database["public"]["Enums"]["app_role"]
+          start_date?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
           team_id?: string | null
         }
