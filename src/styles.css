@@ -137,6 +137,20 @@
 
   html { background: var(--wr-bg-primary); }
 
+  *, *::before, *::after {
+    font-family: 'Heebo', system-ui, sans-serif;
+  }
+
+  input, textarea, select {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Heebo', system-ui, sans-serif;
+  }
+  input::placeholder, textarea::placeholder {
+    direction: rtl;
+    text-align: right;
+  }
+
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--wr-bg-primary); }
   ::-webkit-scrollbar-thumb { background: var(--wr-border); border-radius: 4px; }
